@@ -9,13 +9,15 @@ class Pasajeros{
     private $nombre;
     private $apellido;
     private $numDocumento;
+    private $telefono;
 
     //Metodo __construct
-    public function __construct($nombre, $apellido, $numDocumento)
+    public function __construct($nombre, $apellido, $numDocumento, $telefono)
     {
         $this->nombre = $nombre;
         $this->apellido = $apellido;
         $this->numDocumento = $numDocumento;
+        $this->telefono = $telefono;
     }
 
     //Metodos de acceso Nombre
@@ -42,11 +44,20 @@ class Pasajeros{
         $this->numDocumento = $numDocumento;
     }
 
+    //Telefono del Pasajero
+    public function getTelefono(){
+        return $this->telefono;
+    }
+    public function setTelefono($telefono){
+        $this->telefono = $telefono;
+    }
+
     //Metodo __toString para mostrar la informacion de los pasajeros
     public function __toString()
     {
         return "Pasajero: ". $this->getNombre() . "\n". 
                 "Apellido: ". $this->getApellido() . "\n". 
-                "Numero de Documento: ". $this->getNumDoc() . "\n";
+                "Numero de Documento: ". $this->getNumDoc() . "\n". 
+                "Telefono: ". $this->getTelefono(). "\n";
     }
 }
