@@ -15,9 +15,9 @@ $objPasajeros = array(
     new Pasajeros("Pedro", "Leron", "92378564", "299334897")
 );
 
-$objResponsable = new ResponsableV("15608957", "19", "Jorge", "Elizalde");
+$objResponsable = new ResponsableV("13", "4938", "Jorge", "Elizalde");
 
-$objViaje = new Viaje(45, "Bariloche", 4, $objPasajeros, $objResponsable);
+$objViaje = new Viaje(3888, "Bariloche", 4, $objPasajeros, $objResponsable);
 
 
 
@@ -53,6 +53,7 @@ do{
                 $objViaje->quitarPasajeros();
                 $objViaje->quitarResponsable();
             }
+            echo "Cambio realizado con exito! :)". "\n";
             break;
         case '2':
             print_r($objViaje->getPasajeros());
@@ -68,7 +69,13 @@ do{
                 $numeroDoc = trim(fgets(STDIN));
                 echo "Numero de telefono: ";
                 $numeroTel = trim(fgets(STDIN));
-                $objViaje->cambiarDatosPasajero($indice, $nombrePas, $apellidoPas, $numeroDoc, $numeroTel);
+                $repetido = $objViaje->checkPasajeroRepetido($numeroDoc);
+                if($repetido == true){
+                    echo "El pasajero que ingreso ya pertenecia en la lista de pasajeros.". "\n";
+                }else{
+                    $objViaje->cambiarDatosPasajero($indice, $nombrePas, $apellidoPas, $numeroDoc, $numeroTel);
+                    echo "Cambio realizado con exito! :)". "\n";
+                }
             }else{
                 echo "Ese numero de pasajero no figura en la lista.". "\n";
             }
@@ -84,7 +91,13 @@ do{
                 $numeroDoc = trim(fgets(STDIN));
                 echo "Numero de telefono: ";
                 $numeroTel = trim(fgets(STDIN));
-                $objViaje->agregarDatosPasajero($nombrePas, $apellidoPas, $numeroTel, $numeroDoc);
+                $repetido = $objViaje->checkPasajeroRepetido($numeroDoc);
+                if($repetido == true){
+                    echo "El pasajero que ingreso ya pertenecia en la lista de pasajeros.". "\n";
+                }else{
+                    $objViaje->agregarDatosPasajero($nombrePas, $apellidoPas, $numeroTel, $numeroDoc);
+                    echo "Datos agregados con exito! :)". "\n";
+                }
             }else{
                 echo "El cupo de pasajeros por viaje ya esta completo.". "\n";
             }
@@ -99,6 +112,7 @@ do{
             echo "Numero de Licencia:";
             $numLic = trim(fgets(STDIN));
             $objViaje->agregarDatosEmpleado($num, $numLic, $nombre, $apellido);
+            echo "Datos agregados con exito! :)". "\n";
             break;
         case '5':
             echo "\n";

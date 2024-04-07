@@ -164,5 +164,19 @@ class Viaje {
         return $bandera;
     }
 
+    //Chequea o verifica que el pasajero no este cargado mas de una vez en el viaje
+    public function checkPasajeroRepetido($dni){
+        $listaPasajeros = $this->getPasajeros();
+        $repetido = false;
+
+        foreach ($listaPasajeros as $pasajero){
+            if($pasajero->getNumDoc() == $dni){
+                $repetido = true;
+            }
+        }
+
+        return $repetido;
+    }
+
 }
 
