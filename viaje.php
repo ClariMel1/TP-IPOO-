@@ -70,9 +70,13 @@ class Viaje {
     //Metodo para recorrer el array de Pasajeros 
     public function recorrerArrayPasajeros() {
         $mostrar = "";
-        $arregloPasajeros = $this->getPasajeros();
-        foreach ($arregloPasajeros as $pasajero) {
-            $mostrar .= $pasajero . "\n";
+        if(count($this->getPasajeros()) == null){
+            $mostrar = 0;
+        }else{
+            $arregloPasajeros = $this->getPasajeros();
+            foreach ($arregloPasajeros as $pasajero) {
+                $mostrar .= $pasajero . "\n";
+            }
         }
         return $mostrar;
     }
@@ -85,7 +89,7 @@ class Viaje {
                 "Cantidad Maxima de pasajeros: ". $this->getCantMax() . "\n".
                 "Viaje a cargo del " . $this->getResponsable(). "\n". 
                 "Pasajeros a bordo: ". "\n" . 
-                $this->recorrerArrayPasajeros(). "\n";
+                $this->recorrerArrayPasajeros();
     }
 
     //Cambiar atributos de la clase Viaje
@@ -102,6 +106,41 @@ class Viaje {
         return $this->setPasajeros($nuevoPasajero);
     }
 
+    //Setear el arreglo de pasajeros
+    public function quitarPasajeros(){
+        $this->objPasajeros = [];
+        $arregloVacio = $this->objPasajeros;
+        return $this->setPasajeros($arregloVacio);
+    }
+    //Setear informacion del Responsable
+    public function quitarResponsable(){
+        return $this->setResponsable(0);
+    }
+
+    //Verifica que el Indice de pasajero exista dentro de la lista
+    public function checkPasajero($i){
+        $pasajerosLista = $this->getPasajeros();
+        if($i >= 0 && $i < count($pasajerosLista)){
+            $bandera = true;
+        }else{
+            $bandera = false;
+        }
+        return $bandera;
+    }
+    //Cambiar atributos de un pasajero
+    public function cambiarDatosPasajero($i, $nombre, $apellido, $numDoc, $telefono){
+        $pasajerosLista = $this->getPasajeros();
+        if($i >= 0 && $i < count($pasajerosLista)){
+
+            $pasajero = $pasajerosLista[$i];
+            $pasajero->setNombre($nombre);
+            $pasajero->setApelLido($apellido);
+            $pasajero->setNumDoc($numDoc);
+            $pasajero->setTelefono($telefono);
+            return $this->cambiarPasajero($pasajerosLista);
+        }
+    }
+
     //Para agregar datos de un Pasajero
     public function agregarDatosPasajero($nombre, $apellido, $numDoc, $telefono){
         $agregarPasajero = new Pasajeros($nombre, $apellido, $numDoc, $telefono);
@@ -111,7 +150,7 @@ class Viaje {
     //Para agregar datos del Responsable
     public function agregarDatosEmpleado($numero, $numeroLic, $nombre, $apellido){
         $agregarEmpleado = new ResponsableV($numero, $numeroLic, $nombre, $apellido);
-        return $agregarEmpleado;
+        return $this->setResponsable($agregarEmpleado);
     }
 
     //Chequea que no se haya llenado el cupo de pasajeros por viaje

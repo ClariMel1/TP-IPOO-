@@ -19,13 +19,17 @@ $objResponsable = new ResponsableV("15608957", "19", "Jorge", "Elizalde");
 
 $objViaje = new Viaje(45, "Bariloche", 4, $objPasajeros, $objResponsable);
 
-echo "EMPRESA TRANSPORTE <<<VIAJE FELIZ>>>". "\n";
+
+
+echo "****************************************". "\n";
+echo "EMPRESA DE TRANSPORTE <<<VIAJE FELIZ>>>". "\n";
+echo "****************************************". "\n";
 echo "1.Modificar Datos del Viaje.". "\n";
-echo "3.Modificar Informacion sobre pasajeros.". "\n";
-echo "4.Agregar pasajeros.". "\n";
-echo "5.Responsable del Viaje.". "\n";
-echo "6.Cargar Informacion del Viaje.". "\n";
-echo "7.Salir". "\n";
+echo "2.Modificar Informacion sobre pasajeros.". "\n";
+echo "3.Agregar pasajeros.". "\n";
+echo "4.Responsable del Viaje.". "\n";
+echo "5.Cargar Informacion del Viaje.". "\n";
+echo "6.Salir". "\n";
 
 do{
     echo "Ingrese su opcion:";
@@ -42,15 +46,34 @@ do{
             $objViaje->cambiarCodigo($codigo);
             $objViaje->cambiarDestino($destino);
             $objViaje->cambiarMaxPasajeros($cantMax);
-            echo $objViaje;
+
+            echo "Desea mantener los datos de pasajeros y del empleado responsable o anularlos?(s/n)";
+            $respuesta = trim(fgets(STDIN));
+            if($respuesta == "s"){
+                $objViaje->quitarPasajeros();
+                $objViaje->quitarResponsable();
+            }
             break;
         case '2':
-            # code...
+            print_r($objViaje->getPasajeros());
+            echo "Ingrese N° de Indice del pasajero a modificar:";
+            $indice = trim(fgets(STDIN));
+            $aviso = $objViaje->checkPasajero($indice);
+            if($aviso == true){
+                echo "Ingrese nombre del Pasajero: ";
+                $nombrePas = trim(fgets(STDIN));
+                echo "Apellido: "; 
+                $apellidoPas = trim(fgets(STDIN));
+                echo "Numero de documento: ";
+                $numeroDoc = trim(fgets(STDIN));
+                echo "Numero de telefono: ";
+                $numeroTel = trim(fgets(STDIN));
+                $objViaje->cambiarDatosPasajero($indice, $nombrePas, $apellidoPas, $numeroDoc, $numeroTel);
+            }else{
+                echo "Ese numero de pasajero no figura en la lista.". "\n";
+            }
             break;
         case '3':
-            # code...
-            break;
-        case '4':
             $check = $objViaje->checkCupoViaje();
             if($check == true){
                 echo "Ingrese nombre del Pasajero: ";
@@ -61,12 +84,12 @@ do{
                 $numeroDoc = trim(fgets(STDIN));
                 echo "Numero de telefono: ";
                 $numeroTel = trim(fgets(STDIN));
-                $objViaje->agregarDatosPasajero($numeroTel, $numeroDoc, $nombrePas, $apellidoPas);
+                $objViaje->agregarDatosPasajero($nombrePas, $apellidoPas, $numeroTel, $numeroDoc);
             }else{
                 echo "El cupo de pasajeros por viaje ya esta completo.". "\n";
             }
             break;
-        case '5':
+        case '4':
             echo "Ingrese nombre del Responsable: ";
             $nombre = trim(fgets(STDIN));
             echo "Apellido:";
@@ -77,9 +100,9 @@ do{
             $numLic = trim(fgets(STDIN));
             $objViaje->agregarDatosEmpleado($num, $numLic, $nombre, $apellido);
             break;
-        case '6':
+        case '5':
             echo "\n";
             echo $objViaje . "\n";
             break;
     }
-}while($opcion !=7);
+}while($opcion !=6);
