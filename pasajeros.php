@@ -55,8 +55,7 @@ class Pasajeros{
     //Metodo __toString para mostrar la informacion de los pasajeros
     public function __toString()
     {
-        return "Pasajero: ". $this->getNombre() . "\n". 
-                "Apellido: ". $this->getApellido() . "\n". 
+        return "Pasajero: ". $this->getNombre() ." ". $this->getApellido() . "\n". 
                 "Numero de Documento: ". $this->getNumDoc() . "\n". 
                 "Telefono: ". $this->getTelefono(). "\n";
     }
