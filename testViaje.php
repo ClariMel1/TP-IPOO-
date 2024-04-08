@@ -20,18 +20,17 @@ $objResponsable = new ResponsableV("13", "4938", "Jorge", "Elizalde");
 $objViaje = new Viaje(3888, "Bariloche", 4, $objPasajeros, $objResponsable);
 
 
-
-echo "****************************************". "\n";
-echo "EMPRESA DE TRANSPORTE <<<VIAJE FELIZ>>>". "\n";
-echo "****************************************". "\n";
-echo "1.Modificar Datos del Viaje.". "\n";
-echo "2.Modificar Informacion sobre pasajeros.". "\n";
-echo "3.Agregar pasajeros.". "\n";
-echo "4.Responsable del Viaje.". "\n";
-echo "5.Cargar Informacion del Viaje.". "\n";
-echo "6.Salir". "\n";
-
 do{
+    echo "****************************************". "\n";
+    echo "EMPRESA DE TRANSPORTE <<<VIAJE FELIZ>>>". "\n";
+    echo "****************************************". "\n";
+    echo "1.Modificar Datos del Viaje.". "\n";
+    echo "2.Modificar Informacion sobre pasajeros.". "\n";
+    echo "3.Agregar pasajeros.". "\n";
+    echo "4.Responsable del Viaje.". "\n";
+    echo "5.Mostrar Informacion del Viaje.". "\n";
+    echo "6.Salir". "\n";
+
     echo "Ingrese su opcion:";
     $opcion = trim(fgets(STDIN));
 
@@ -99,7 +98,7 @@ do{
                     echo "Datos agregados con exito! :)". "\n";
                 }
             }else{
-                echo "El cupo de pasajeros por viaje ya esta completo.". "\n";
+                echo "El cupo de pasajeros para el viaje con destino a <<". $objViaje->getDestino(). ">> ya esta completo.". "\n";
             }
             break;
         case '4':

@@ -117,6 +117,31 @@ class Viaje {
         return $this->setResponsable(0);
     }
 
+    //Chequea que no se haya llenado el cupo de pasajeros por viaje
+    public function checkCupoViaje(){
+        $maximo = $this->getCantMax();
+        if (count($this->objPasajeros) < $maximo){
+            $bandera = true;
+        }else{
+            $bandera = false;
+        }
+        return $bandera;
+    }
+
+    //Chequea o verifica que el pasajero no este cargado mas de una vez en el viaje
+    public function checkPasajeroRepetido($dni){
+        $listaPasajeros = $this->getPasajeros();
+        $repetido = false;
+
+        foreach ($listaPasajeros as $pasajero){
+            if($pasajero->getNumDoc() == $dni){
+                $repetido = true;
+            }
+        }
+
+        return $repetido;
+    }
+    
     //Verifica que el Indice de pasajero exista dentro de la lista
     public function checkPasajero($i){
         $pasajerosLista = $this->getPasajeros();
@@ -152,31 +177,5 @@ class Viaje {
         $agregarEmpleado = new ResponsableV($numero, $numeroLic, $nombre, $apellido);
         return $this->setResponsable($agregarEmpleado);
     }
-
-    //Chequea que no se haya llenado el cupo de pasajeros por viaje
-    public function checkCupoViaje(){
-        $maximo = $this->getCantMax();
-        if (count($this->objPasajeros) < $maximo){
-            $bandera = true;
-        }else{
-            $bandera = false;
-        }
-        return $bandera;
-    }
-
-    //Chequea o verifica que el pasajero no este cargado mas de una vez en el viaje
-    public function checkPasajeroRepetido($dni){
-        $listaPasajeros = $this->getPasajeros();
-        $repetido = false;
-
-        foreach ($listaPasajeros as $pasajero){
-            if($pasajero->getNumDoc() == $dni){
-                $repetido = true;
-            }
-        }
-
-        return $repetido;
-    }
-
 }
 
