@@ -1,30 +1,36 @@
 <?php
 
-/**
+/**ENUCIADO 1
  * La empresa de Transporte de Pasajeros “Viaje Feliz” quiere registrar la información referente a sus viajes.
  * De cada viaje se precisa almacenar el código del mismo, destino, cantidad máxima de pasajeros y los pasajeros del viaje.
-*/
-
-/**
  * Realice la implementación de la clase Viaje e implemente los métodos necesarios para modificar los atributos de dicha clase
- *  (incluso los datos de los pasajeros).
+ * (incluso los datos de los pasajeros).
 */
-
+/*ENUNCIADO 2
+ * Modificar la clase viaje para almacenar el costo del viaje, la suma de los costos abonados por los pasajeros e 
+ * implementar el método venderPasaje($objPasajero) que debe incorporar el pasajero a la colección de pasajeros
+ *( solo si hay espacio disponible), actualizar los costos abonados y retornar el costo final que deberá ser abonado 
+ * por el pasajero.
+*/
 class Viaje {
     private $codigo_viaje;
     private $destino;
+    private $costoViaje; //agregue
     private $cant_max_pasajeros;
     private $objPasajeros;
     private $objResponsable;
+    private $sumaCostos; //agregue
 
     //Metodo __construct
-    public function __construct($codigo_viaje, $destino, $cant_max_pasajeros, $objPasajeros, $objResponsable)
+    public function __construct($codigo_viaje, $destino, $costoViaje, $cant_max_pasajeros, $objPasajeros, $objResponsable, $sumaCostos)
     {
         $this->codigo_viaje = $codigo_viaje;
         $this->destino = $destino;
+        $this->costoViaje = $costoViaje;
         $this->cant_max_pasajeros = $cant_max_pasajeros;
         $this->objPasajeros = $objPasajeros;
         $this->objResponsable = $objResponsable;
+        $this->sumaCostos = $sumaCostos;
     }
 
     //Metodos de acceso de Codigo de Viaje
@@ -41,6 +47,14 @@ class Viaje {
     }
     public function setDestino($destino){
         $this->destino = $destino;
+    }
+
+    //Costo del Viaje
+    public function getCosto(){
+        return $this->costoViaje;
+    }
+    public function setCosto($costoViaje){
+        $this->costoViaje = $costoViaje;
     }
 
     //Cantidad Maxima de pasajeros
@@ -67,6 +81,14 @@ class Viaje {
         $this->objResponsable = $objResponsable;
     }
 
+    //Suma de los Costos
+    public function getSumaCostos(){
+        return $this->sumaCostos;
+    }
+    public function setSumaCostos ($sumaCostos){
+        $this->sumaCostos = $sumaCostos;
+    }
+
     //Metodo para recorrer el array de Pasajeros 
     public function recorrerArrayPasajeros() {
         $mostrar = "";
@@ -85,11 +107,13 @@ class Viaje {
     public function __toString()
     {
         return "Codigo de Viaje: ". $this->getCodigo(). "\n" . 
-                "Lugar de Destino: ". $this->getDestino(). "\n" . 
+                "Lugar de Destino: ". $this->getDestino(). "\n" .
+                "Costo del Viaje: ". $this->getCosto(). "\n".  
                 "Cantidad Maxima de pasajeros: ". $this->getCantMax() . "\n".
                 "Viaje a cargo del " . $this->getResponsable(). "\n". 
                 "Pasajeros a bordo: ". "\n" . 
-                $this->recorrerArrayPasajeros();
+                $this->recorrerArrayPasajeros(). "\n". 
+                "Suma de costo abonados: ". $this->getSumaCostos(). "\n";
     }
 
     //Cambiar atributos de la clase Viaje
@@ -98,6 +122,9 @@ class Viaje {
     }
     public function cambiarDestino($nuevoDestino){
         return $this->setDestino($nuevoDestino);
+    }
+    public function cambiarCosto($nuevoCosto){
+        return $this->setCosto($nuevoCosto);
     }
     public function cambiarMaxPasajeros($nuevoMaxPasajeros){
         return $this->setCantMax($nuevoMaxPasajeros);
@@ -117,8 +144,12 @@ class Viaje {
         return $this->setResponsable(0);
     }
 
+    /** ENUNCIADO 2
+     * Implemente la función hayPasajesDisponible() que retorna verdadero si la cantidad de pasajeros del viaje es
+     *  menor a la cantidad máxima de pasajeros y falso caso contrario
+    */
     //Chequea que no se haya llenado el cupo de pasajeros por viaje
-    public function checkCupoViaje(){
+    public function hayPasajeDisponible(){
         $maximo = $this->getCantMax();
         if (count($this->objPasajeros) < $maximo){
             $bandera = true;
@@ -126,6 +157,29 @@ class Viaje {
             $bandera = false;
         }
         return $bandera;
+    }
+
+    /** ENUNCIADO 2
+     *Implementar el método venderPasaje($objPasajero) que debe incorporar el pasajero a la colección de pasajeros 
+     * ( solo si hay espacio disponible), actualizar los costos abonados y retornar el costo final que deberá ser abonado
+     *  por el pasajero.
+    */
+    public function venderPasaje ($objPasajero){
+        $disponibilidad = $this->hayPasajeDisponible();
+        $costoFinal = $this->getSumaCostos();
+
+        if($disponibilidad){
+            $this->objPasajeros[]= $objPasajero;
+            $precioUnitario = $this->getCosto();
+
+            $porcentajeInc = $objPasajero->darPorcentajeIncremento();
+            $costoFinal = $costoFinal + ($precioUnitario * ($porcentajeInc / 100));
+        }else{
+            $costoFinal = -1;
+            // Indica que no hay disponibilidad de pasajes.
+        }
+
+        return $costoFinal;
     }
 
     //Chequea o verifica que el pasajero no este cargado mas de una vez en el viaje
@@ -164,12 +218,6 @@ class Viaje {
             $pasajero->setTelefono($telefono);
             return $this->cambiarPasajero($pasajerosLista);
         }
-    }
-
-    //Para agregar datos de un Pasajero
-    public function agregarDatosPasajero($nombre, $apellido, $numDoc, $telefono){
-        $agregarPasajero = new Pasajeros($nombre, $apellido, $numDoc, $telefono);
-        return array_push($this->objPasajeros, $agregarPasajero);
     }
 
     //Para agregar datos del Responsable
