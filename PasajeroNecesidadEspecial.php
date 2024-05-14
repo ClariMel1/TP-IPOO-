@@ -25,7 +25,7 @@ class PasajeroNecesidadEspecial extends Pasajero {
     // Método para representar el objeto como una cadena
     public function __toString() {
         $mostrar = parent::__toString();
-        $mostrar = $mostrar.  "\nServicios Especiales: " . $this->getServiciosEspeciales(). "\n";
+        $mostrar = $mostrar.  "Servicios Especiales: " . $this->getServiciosEspeciales(). "\n";
         return $mostrar;
     }
 }

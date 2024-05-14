@@ -2,7 +2,7 @@
 
 //La clase "PasajeroVIP" tiene como atributos adicionales el número de viajero frecuente y cantidad de millas de pasajero.
 
-class PasajeroVIP extends Pasajero {
+class PasajeroVip extends Pasajero {
     private $num_frecuencia;
     private $cant_millas;
 

@@ -19,10 +19,9 @@ class Viaje {
     private $cant_max_pasajeros;
     private $objPasajeros;
     private $objResponsable;
-    private $sumaCostos; //agregue
 
     //Metodo __construct
-    public function __construct($codigo_viaje, $destino, $costoViaje, $cant_max_pasajeros, $objPasajeros, $objResponsable, $sumaCostos)
+    public function __construct($codigo_viaje, $destino, $costoViaje, $cant_max_pasajeros, $objPasajeros, $objResponsable)
     {
         $this->codigo_viaje = $codigo_viaje;
         $this->destino = $destino;
@@ -30,7 +29,6 @@ class Viaje {
         $this->cant_max_pasajeros = $cant_max_pasajeros;
         $this->objPasajeros = $objPasajeros;
         $this->objResponsable = $objResponsable;
-        $this->sumaCostos = $sumaCostos;
     }
 
     //Metodos de acceso de Codigo de Viaje
@@ -81,14 +79,6 @@ class Viaje {
         $this->objResponsable = $objResponsable;
     }
 
-    //Suma de los Costos
-    public function getSumaCostos(){
-        return $this->sumaCostos;
-    }
-    public function setSumaCostos ($sumaCostos){
-        $this->sumaCostos = $sumaCostos;
-    }
-
     //Metodo para recorrer el array de Pasajeros 
     public function recorrerArrayPasajeros() {
         $mostrar = "";
@@ -113,7 +103,7 @@ class Viaje {
                 "Viaje a cargo del " . $this->getResponsable(). "\n". 
                 "Pasajeros a bordo: ". "\n" . 
                 $this->recorrerArrayPasajeros(). "\n". 
-                "Suma de costo abonados: ". $this->getSumaCostos(). "\n";
+                "Suma de costo abonados: ". $this->sumaCostos(). "\n";
     }
 
     //Cambiar atributos de la clase Viaje
@@ -159,6 +149,21 @@ class Viaje {
         return $bandera;
     }
 
+    //Suma los costos dentro de un arreglo de pasajeros para obtner el costo final
+    public function sumaCostos(){
+        $pasajeros = $this->objPasajeros;
+        $suma = 0;
+        $precio = $this->getCosto();
+
+        for ($i=0; $i < count($pasajeros); $i++){
+            $pasajero = $pasajeros[$i];
+            $incremento = $pasajero->darPorcentajeIncremento();
+            $precioConIncremento = $precio + ($precio * ($incremento / 100));
+            $suma = $suma + $precioConIncremento;
+        }
+        return $suma;
+    }
+
     /** ENUNCIADO 2
      *Implementar el método venderPasaje($objPasajero) que debe incorporar el pasajero a la colección de pasajeros 
      * ( solo si hay espacio disponible), actualizar los costos abonados y retornar el costo final que deberá ser abonado
@@ -166,14 +171,10 @@ class Viaje {
     */
     public function venderPasaje ($objPasajero){
         $disponibilidad = $this->hayPasajeDisponible();
-        $costoFinal = $this->getSumaCostos();
 
         if($disponibilidad){
             $this->objPasajeros[]= $objPasajero;
-            $precioUnitario = $this->getCosto();
-
-            $porcentajeInc = $objPasajero->darPorcentajeIncremento();
-            $costoFinal = $costoFinal + ($precioUnitario * ($porcentajeInc / 100));
+            $costoFinal = $this->sumaCostos();
         }else{
             $costoFinal = -1;
             // Indica que no hay disponibilidad de pasajes.

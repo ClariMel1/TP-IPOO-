@@ -5,19 +5,20 @@
  * presente un menú que permita cargar la información del viaje, modificar y ver sus datos.
 */
 
-include 'viaje.php';
-include 'pasajeros.php';
+include 'Viaje.php';
+include 'Pasajero.php';
+include 'PasajeroVip.php';
+include 'PasajeroNecesidadEspecial.php';
 include 'responsableV.php';
 
-$objPasajeros = array(
-    new Pasajeros("Diana", "Mendez", "92456978", "299576234"),
-    new Pasajeros("Lucia", "Lazuli", "46089657","299873456" ),
-    new Pasajeros("Pedro", "Leron", "92378564", "299334897")
-);
+$objPasajero1 = new Pasajero ("Diana", "Mendez", "92456978", "299576234", 2, 1);
+$objPasajero2 = new PasajeroVip ("Lucia", "Lazuli", "46089657","299873456", 3, 3, 7, 8000);
+$objPasajero3 = new PasajeroNecesidadEspecial ("Pedro", "Leron", "92378564", "299334897", 4, 1, "Asistencia" );
+$arregloPasajeros = [$objPasajero1, $objPasajero2, $objPasajero3];
 
 $objResponsable = new ResponsableV("13", "4938", "Jorge", "Elizalde");
 
-$objViaje = new Viaje(3888, "Bariloche", 4, $objPasajeros, $objResponsable);
+$objViaje = new Viaje(3888, "Bariloche", 2700, 4, $arregloPasajeros, $objResponsable, 0);
 
 
 do{
@@ -26,7 +27,7 @@ do{
     echo "****************************************". "\n";
     echo "1.Modificar Datos del Viaje.". "\n";
     echo "2.Modificar Informacion sobre pasajeros.". "\n";
-    echo "3.Agregar pasajeros.". "\n";
+    echo "3.Vender Pasajes.". "\n";
     echo "4.Responsable del Viaje.". "\n";
     echo "5.Mostrar Informacion del Viaje.". "\n";
     echo "6.Salir". "\n";
@@ -80,26 +81,68 @@ do{
             }
             break;
         case '3':
-            $check = $objViaje->checkCupoViaje();
-            if($check == true){
-                echo "Ingrese nombre del Pasajero: ";
-                $nombrePas = trim(fgets(STDIN));
-                echo "Apellido: "; 
-                $apellidoPas = trim(fgets(STDIN));
-                echo "Numero de documento: ";
-                $numeroDoc = trim(fgets(STDIN));
+            echo "Ingrese nombre del Pasajero: ";
+            $nombrePas = trim(fgets(STDIN));
+            echo "Apellido: "; 
+            $apellidoPas = trim(fgets(STDIN));
+            echo "Numero de documento: ";
+            $numeroDoc = trim(fgets(STDIN));
+
+            $repetido = $objViaje->checkPasajeroRepetido($numeroDoc);
+            if($repetido == true){
+                echo "El pasajero que ingreso ya pertenecia en la lista de pasajeros.". "\n";
+            }else{
                 echo "Numero de telefono: ";
                 $numeroTel = trim(fgets(STDIN));
-                $repetido = $objViaje->checkPasajeroRepetido($numeroDoc);
-                if($repetido == true){
-                    echo "El pasajero que ingreso ya pertenecia en la lista de pasajeros.". "\n";
-                }else{
-                    $objViaje->agregarDatosPasajero($nombrePas, $apellidoPas, $numeroTel, $numeroDoc);
-                    echo "Datos agregados con exito! :)". "\n";
+                echo "Numero de Asiento: ";
+                $asiento = trim(fgets(STDIN));
+                echo "Numero de ticket: ";
+                $ticket = trim(fgets(STDIN));
+
+                echo "**********************". "\n";
+                echo "CATEGORIA DE PASAJERO". "\n";
+                echo "**********************". "\n";
+                echo "1. Pasajero Estandar.". "\n";
+                echo "2. Pasajero Vip.". "\n";
+                echo "3. Pasajero con Necesidades Especiales.". "\n";
+                $categoria = trim(fgets(STDIN));
+                if ($categoria == 1){
+                    $objPasajero = new Pasajero($nombrePas, $apellidoPas, $numeroDoc, $numeroTel, $asiento, $ticket);
+                }elseif($categoria == 2){
+                    echo "Numero de frecuencia: ";
+                    $frecuencia = trim(fgets(STDIN));
+                    echo "Millas: ";
+                    $millas = trim(fgets(STDIN));
+                    $objPasajero = new PasajeroVip($nombrePas, $apellidoPas, $numeroDoc, $numeroTel, $asiento, $ticket, $frecuencia, $millas);
+                }elseif($categoria == 3){
+                    echo "**************************". "\n";
+                    echo "SERVICIOS DE OFRECIMIENTO". "\n";
+                    echo "**************************". "\n";
+                    echo "1.Silla de ruedas". "\n";
+                    echo "2.Asistencia". "\n";
+                    echo "3.Comida Especial". "\n";
+                    echo "4.TODAS". "\n";
+                    $servicio = trim(fgets(STDIN));
+                    if ($servicio == 4){
+                        $servicio = "Silla de ruedas, asistencia y comida especial";
+                    }elseif($servicio == 3){
+                        $servicio = "Comida Especial";
+                    }elseif($servicio == 2){
+                        $servicio = "Asistencia";
+                    }elseif($servicio == 1){
+                        $servicio = "Silla de ruedas";
+                    }
+                    $objPasajero = new PasajeroNecesidadEspecial($nombrePas, $apellidoPas, $numeroDoc, $numeroTel, $asiento, $ticket, $servicio);
                 }
-            }else{
-                echo "El cupo de pasajeros para el viaje con destino a <<". $objViaje->getDestino(). ">> ya esta completo.". "\n";
+
+                $realizarVenta = $objViaje->venderPasaje($objPasajero);
+                if($realizarVenta != -1){
+                    echo "Venta Realizada!". "\n";
+                }else{
+                    echo "El cupo de pasajeros para el viaje con destino a <<". $objViaje->getDestino(). ">> ya esta completo.". "\n";
+                }
             }
+            
             break;
         case '4':
             echo "Ingrese nombre del Responsable: ";
