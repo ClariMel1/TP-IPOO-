@@ -4,9 +4,10 @@
  * Utilice clases y arreglos  para   almacenar la información correspondiente a los pasajeros.
  * Cada pasajero guarda  su “nombre”, “apellido” y “numero de documento”.
 */
+
 //La clase Pasajero tiene como atributos el nombre, el número de asiento y el número de ticket del pasaje del viaje.
 
-class Pasajeros{
+class Pasajero{
     private $nombre;
     private $apellido;
     private $numDocumento;
