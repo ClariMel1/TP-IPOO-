@@ -16,7 +16,7 @@ class PasajeroVip extends Pasajero {
     // Numero de Frecuencia
     public function getNumFrecuencia() {
         return $this->num_frecuencia;
-    }
+    }                                       
     public function setNumFrecuencia($num_frecuencia) {
         $this->num_frecuencia = $num_frecuencia;
     }
@@ -35,6 +35,18 @@ class PasajeroVip extends Pasajero {
         $mostrar = $mostrar . "Número de Frecuencia: " . $this->getNumFrecuencia() . "\nMillas: " . $this->getCantMillas(). "\n";
         return $mostrar;
     }
+
+    //Metodo para calcular el porcentaje de incremento del Pasajero VIP 
+    public function darPorcentajeIncremento() {
+        if ($this->getCantMillas() > 300) {
+            $porcentajeInc = 30;
+        }else{
+            $porcentajeInc = 35 ;
+        }
+        return $porcentajeInc;
+    }
+
+    
 }
 
 ?>

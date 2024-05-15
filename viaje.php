@@ -28,7 +28,6 @@ class Viaje {
         $this->costoViaje = $costoViaje;
         $this->cant_max_pasajeros = $cant_max_pasajeros;
         $this->objPasajeros = $objPasajeros;
-        $this->objResponsable = $objResponsable;
     }
 
     //Metodos de acceso de Codigo de Viaje
@@ -151,16 +150,15 @@ class Viaje {
 
     //Suma los costos dentro de un arreglo de pasajeros para obtner el costo final
     public function sumaCostos(){
-        $pasajeros = $this->objPasajeros;
+        $precio = $this->getCosto(); // Obtener el costo base del viaje
         $suma = 0;
-        $precio = $this->getCosto();
-
-        for ($i=0; $i < count($pasajeros); $i++){
-            $pasajero = $pasajeros[$i];
+        foreach ($this->objPasajeros as $pasajero) {
             $incremento = $pasajero->darPorcentajeIncremento();
-            $precioConIncremento = $precio + ($precio * ($incremento / 100));
-            $suma = $suma + $precioConIncremento;
+            $precioConIncremento = $precio * ($incremento / 100);
+            $precioFinal = $precio +  $precioConIncremento;
+            $suma = $suma + $precioFinal;
         }
+    return $suma;
         return $suma;
     }
 
@@ -193,7 +191,6 @@ class Viaje {
                 $repetido = true;
             }
         }
-
         return $repetido;
     }
     
@@ -207,18 +204,66 @@ class Viaje {
         }
         return $bandera;
     }
-    //Cambiar atributos de un pasajero
-    public function cambiarDatosPasajero($i, $nombre, $apellido, $numDoc, $telefono){
-        $pasajerosLista = $this->getPasajeros();
-        if($i >= 0 && $i < count($pasajerosLista)){
 
+    //Evalua de que categoria pertenece el pasajero dado su indice del listado
+    public function checkTipoPasajero($i){
+        if ($this->checkPasajero($i)) { 
+            $pasajerosLista = $this->getPasajeros();
+            print_r($pasajerosLista);
             $pasajero = $pasajerosLista[$i];
-            $pasajero->setNombre($nombre);
-            $pasajero->setApelLido($apellido);
-            $pasajero->setNumDoc($numDoc);
-            $pasajero->setTelefono($telefono);
-            return $this->cambiarPasajero($pasajerosLista);
+            print_r($pasajero);
+            $tipo = null;
+            if($pasajero instanceof PasajeroVip) {
+                $tipo = 1; // Pasajero vip
+            } elseif($pasajero instanceof PasajeroNecesidadEspecial) {
+                $tipo = 0; // Pasajero con necesidades especiales
+            } else {
+                $tipo = -1; // Pasajero estandar
+            }
+        } else {
+            $tipo = null;
         }
+        return $tipo;
+    }
+
+    //Modifica los datos de los pasajeros dependiendo su categoria
+    public function modificarPasajero($i,$nombre, $apellido, $documento, $telefono, $numAsiento, $numTicket){
+        $pasajerosLista = $this->getPasajeros();
+        $pasajero = $pasajerosLista[$i];
+
+        $pasajero->setNombre($nombre);
+        $pasajero->setApellido($apellido);
+        $pasajero->setNumDoc($documento);
+        $pasajero->setTelefono($telefono);
+        $pasajero->setNumAsiento($numAsiento);
+        $pasajero->setNumTicket($numTicket);
+    }
+
+    public function modificarPasajeroVip($i,$nombre, $apellido, $documento, $telefono, $numAsiento, $numTicket, $numeroFrecuencia, $millas){
+        $pasajerosLista = $this->getPasajeros();
+        $pasajero = $pasajerosLista[$i];
+
+        $pasajero->setNombre($nombre);
+        $pasajero->setApellido($apellido);
+        $pasajero->setNumDoc($documento);
+        $pasajero->setTelefono($telefono);
+        $pasajero->setNumAsiento($numAsiento);
+        $pasajero->setNumTicket($numTicket);
+        $pasajero->setNumFrecuencia($numeroFrecuencia);
+        $pasajero->setCantMillas($millas);
+    }
+
+    public function modificarPasajeroNesEsp($i,$nombre, $apellido, $documento, $telefono, $numAsiento, $numTicket, $servicio){
+        $pasajerosLista = $this->getPasajeros();
+        $pasajero = $pasajerosLista[$i];
+
+        $pasajero->setNombre($nombre);
+        $pasajero->setApellido($apellido);
+        $pasajero->setNumDoc($documento);
+        $pasajero->setTelefono($telefono);
+        $pasajero->setNumAsiento($numAsiento);
+        $pasajero->setNumTicket($numTicket);
+        $pasajero->setServiciosEspeciales($servicio);
     }
 
     //Para agregar datos del Responsable
@@ -226,5 +271,6 @@ class Viaje {
         $agregarEmpleado = new ResponsableV($numero, $numeroLic, $nombre, $apellido);
         return $this->setResponsable($agregarEmpleado);
     }
+
 }
 

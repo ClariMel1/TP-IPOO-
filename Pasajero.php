@@ -79,7 +79,7 @@ class Pasajero{
     {
         return "Pasajero: ". $this->getNombre() ." ". $this->getApellido() . "\n". 
                 "Numero de Documento: ". $this->getNumDoc() . "\n". 
-                "Telefono: ". $this->getTelefono(). "\n";
+                "Telefono: ". $this->getTelefono(). "\n".
                 "Asiento: " . $this->getNumAsiento() ."   ". "Ticket: " . $this->getNumTicket().  "\n";
     }
 
@@ -91,25 +91,7 @@ class Pasajero{
      * el porcentaje de incremento es del 10 % 
     */
     public function darPorcentajeIncremento() {
-        $porcentajeInc = 0;
-
-        if ($this instanceof PasajeroVIP) {
-            if ($this->getCantMillas() > 300) {
-                $porcentajeInc = $porcentajeInc + 30;
-            } else {
-                $porcentajeInc = $porcentajeInc + 35;
-            }
-        }elseif ($this instanceof PasajeroNecesidadEspecial) {
-            if ($this->getServiciosEspeciales() == "Silla de ruedas, asistencia y comida especial") {
-                $porcentajeInc = $porcentajeInc +  30;
-            }else {
-                $porcentajeInc = $porcentajeInc +  15;
-            }
-        }else {
-            $porcentajeInc = $porcentajeInc + 10;
-            // Para pasajero común
-        }
-
+        $porcentajeInc = 10;
         return $porcentajeInc;
     }
 }

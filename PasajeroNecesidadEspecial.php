@@ -28,6 +28,16 @@ class PasajeroNecesidadEspecial extends Pasajero {
         $mostrar = $mostrar.  "Servicios Especiales: " . $this->getServiciosEspeciales(). "\n";
         return $mostrar;
     }
+
+    //Metodo para calcular el porcentaje de incremento del Pasajero VIP 
+    public function darPorcentajeIncremento() {
+        if ($this->getServiciosEspeciales() == "Silla de ruedas, asistencia y comida especial") {
+            $porcentajeInc = 30;
+        }else {
+            $porcentajeInc = 15;
+        }
+        return $porcentajeInc;
+    }
 }
 
 ?>
