@@ -47,11 +47,15 @@ do{
                     $codigo = trim(fgets(STDIN));
                     echo "Ingrese Destino del viaje:";
                     $destino = trim(fgets(STDIN));
+                    echo "Ingrese costo unitario del viaje:";
+                    $costo = trim(fgets(STDIN));
                     echo "Ingrese Cantidad Maxima de pasajeros:";
                     $cantMax = trim(fgets(STDIN));
+                    
                     $objViaje->cambiarCodigo($codigo);
                     $objViaje->cambiarDestino($destino);
                     $objViaje->cambiarMaxPasajeros($cantMax);
+                    $objViaje->cambiarCosto($costo);
             
                     echo "Desea mantener los datos de pasajeros y del empleado responsable o anularlos?(s/n)";
                     $respuesta = trim(fgets(STDIN));
